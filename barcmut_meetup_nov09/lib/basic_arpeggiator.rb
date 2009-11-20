@@ -1,8 +1,9 @@
 class BasicArpeggiator
   
-  TICKS_PER_SIXTEENTH_NOTE = 120
+  DEFAULT_PERIOD = 240  # eight note (480 ticks per beat)
   
-  def initialize(&block)
+  def initialize(period_in_ticks = DEFAULT_PERIOD, &block)
+    @tick_rate = 1.0 / period_in_ticks
     @output = block
     @held_notes = {}
     @pitches = []
@@ -20,7 +21,7 @@ class BasicArpeggiator
   end
   
   def play(time_in_ticks)
-    pitch = select_pitch(index_for time_in_ticks)    
+    pitch = select_pitch(index_for(time_in_ticks))    
     velocity = @held_notes[pitch] if pitch
     @output[pitch, velocity] if velocity
   end
@@ -34,7 +35,7 @@ class BasicArpeggiator
   end
   
   def index_for(time_in_ticks)
-    (time_in_ticks / TICKS_PER_SIXTEENTH_NOTE).to_i
+    (time_in_ticks * @tick_rate).round
   end
   
   def select_pitch(index, pitches=@pitches)

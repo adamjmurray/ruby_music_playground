@@ -10,9 +10,9 @@ describe BasicArpeggiator do
     end
   end
   
-  def play_sixteenth_notes(number_of_notes)
+  def play_notes(number_of_notes)
     number_of_notes.times do |i|
-      @arp.play(i * BasicArpeggiator::TICKS_PER_SIXTEENTH_NOTE)
+      @arp.play(i * BasicArpeggiator::DEFAULT_PERIOD)
     end
   end
   
@@ -29,14 +29,14 @@ describe BasicArpeggiator do
   
   it 'should repeat a single note' do
     @arp.note_in(60,100)
-    play_sixteenth_notes(16)
+    play_notes(16)
     @output.should == ( [[60,100]] * 16 )
   end
 
   it 'should alternate between two notes' do
     @arp.note_in(60,100)
     @arp.note_in(61,50)
-    play_sixteenth_notes(16)
+    play_notes(16)
     @output.should == ( [[60,100],[61,50]] * 8 )
   end
 
@@ -44,7 +44,7 @@ describe BasicArpeggiator do
     @arp.note_in(60,100)
     @arp.note_in(61,50)
     @arp.note_in(61,0) # note off
-    play_sixteenth_notes(16)
+    play_notes(16)
     @output.should == ( [[60,100]] * 16 )
   end
   
